@@ -18,11 +18,16 @@ async function init() {
 
   rl.on("line", async function (line) {
     const [riderName, location] = line.split(" ");
+    console.log(
+      `Location: ${location}, Partition: ${
+        location.toLowerCase() === "north" ? 0 : 1
+      }`
+    );
     await producer.send({
-      partition: location.toLowerCase() === "north" ? 0 : 1,
       topic: "rider-status",
       messages: [
         {
+          partition: location.toLowerCase() === "north" ? 0 : 1,
           key: "location-update",
           value: JSON.stringify({ name: riderName, loc: location }),
         },
